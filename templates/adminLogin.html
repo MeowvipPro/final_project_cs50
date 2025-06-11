@@ -4,20 +4,84 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminStyle.css') }}">
-    <title>Login as Admin</title>
+    <title>Admin Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .FormContent {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .FormContent h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .FormContent input[type="email"],
+        .FormContent input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .FormContent input[type="submit"] {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .FormContent input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        .error-message {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="FormContent">
-    {% if flag %}
-        <span style="color: white; background-color: rgb(253, 91, 91); padding: 5px; width:100% ;text-align: center;">Invalid credentials provided</span>
-    {% endif %}
-    <h1>Login as Admin.</h1>
-    <form action="#" method="post">
-        <input type="email" name="email" id="email" placeholder="Email" required><br><br>
-        <input type="password" name="password" id="password" placeholder="Password" required><br><br>
-        <input type="submit" value="LOGIN">
-    </form>
-</div>
+        {% if flag %}
+            <div class="error-message">Invalid credentials provided</div>
+        {% endif %}
+        <h1>Admin Login</h1>
+        <form action="#" method="post">
+            <input type="email" name="email" id="email" placeholder="Email" required><br>
+            <input type="password" name="password" id="password" placeholder="Password" required><br>
+            <input type="submit" value="LOGIN">
+        </form>
+    </div>
 </body>
 </html>
