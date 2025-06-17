@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
-{% block  title%}{{ food[3] }}{% endblock  %}
+{% block  title%}{{ car[3] }}{% endblock  %}
 
 {% block body %}
-{% if food != [] %}
+{% if car != [] %}
     <div class="product">
         <div class="productImage">
-            <img src="/static/images/{{ food[1] }}" alt="">
+            <img src="/static/images/{{ car[1] }}" alt="">
         </div>
-        <div class="foodReviews">
+        <div class="carReviews">
         <div class="productContent">
             <div class="productTitle">
-                <h1>{{ food[3] }}</h1>
+                <h1>{{ car[3] }}</h1>
             </div>
             <div class="productPrice">
-                <p>Rs. {{ food[2] }}</p>
+                <p>Rs. {{ car[2] }}</p>
             </div>
             <span>Ratings: </span>
             {% if  reviewsAndCount != None %}
@@ -28,27 +28,27 @@
             {% endif %}
             <br>
             <br>
-            <p class="descText">Food Details</p>
+            <p class="descText">car Details</p>
             <div class="productDesc">
-                <p>{{ food[4] }}</p>
+                <p>{{ car[4] }}</p>
             </div><br>
-            {% set foodPrice = food[2] %}
+            {% set carPrice = car[2] %}
         <div class="paymentInfoAndTotal">
         <form action="#" method="post">
             <span style="font-weight: 500;">Quantity:</span>
-            <input class="quantity" type="number" min="1" name="quantity" id="quantity" value="1" required oninput="calcTotal('{{ food[2] }}')"><br><br>
+            <input class="quantity" type="number" min="1" name="quantity" id="quantity" value="1" required oninput="calcTotal('{{ car[2] }}')"><br><br>
             {% if Myflag %}
             <span style="color: white; background-color: rgb(253, 91, 91); padding: 5px; width:100% ;text-align: center;">User with this payment already exists</span>
             {% endif %}
             <p class="descText">Payment Information</p>
             <input type="text" pattern="[0-9]*" minlength="11" maxlength="11" name="pay_number" id="pay_number" placeholder="Pay Number" required><br><br>
-            <input type="number" min="{{ food[2] }}" name="pay_amount" id="pay_amount" placeholder="Pay Amount" required oninput="document.getElementById('pay_amount').value = parseInt(document.getElementById('totalPrice').innerHTML)"><br><br>
+            <input type="number" min="{{ car[2] }}" name="pay_amount" id="pay_amount" placeholder="Pay Amount" required oninput="document.getElementById('pay_amount').value = parseInt(document.getElementById('totalPrice').innerHTML)"><br><br>
             <span><input type="submit" value="BUY NOW"></span>
         </form>
         <span class="TP">
             <h3>Total Price:</h3>
             <span style="font-size: large;">Rs.</span>
-            <span style="font-size: large; color: orange;" id="totalPrice">{{ food[2] }}</span>
+            <span style="font-size: large; color: orange;" id="totalPrice">{{ car[2] }}</span>
 
         </span>
 

@@ -7,7 +7,7 @@ class Database:
 
     @staticmethod
     def CreateTableAdmin():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
         CREATE TABLE Admin(
@@ -21,7 +21,7 @@ class Database:
 
     @staticmethod
     def insertIntoAdmin(id, email, password):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         try:
             cursor.execute("INSERT INTO ADMIN VALUES (?,?,?)",
@@ -33,7 +33,7 @@ class Database:
 
     @staticmethod
     def checkInAdmin(email, password):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         admins = cursor.execute("SELECT * from Admin")
         for admin in admins:
@@ -43,14 +43,14 @@ class Database:
 
     @staticmethod
     def returnAdmins():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         admins = cursor.execute("SELECT * from Admin")
         return admins
 
     @staticmethod
     def CreateTableCustomer():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
         CREATE TABLE Customers(
@@ -72,7 +72,7 @@ class Database:
 
     @staticmethod
     def insertIntoCustomer(first_name, last_name, username, Useremail, Userpassword, phone, address):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
@@ -87,7 +87,7 @@ class Database:
 
     # @staticmethod
     # def updateCustomerWithPayId(cus_id, pay_id):
-    #     connection = s.connect("foodSystem.db")
+    #     connection = s.connect("carSystem.db")
     #     cursor = connection.cursor()
     #     cursor.execute("pragma foreign_keys=on")
     #     cursor.execute(
@@ -97,7 +97,7 @@ class Database:
 
     @ staticmethod
     def customerIdExists(id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         customerCountList = cursor.execute(
             f"SELECT COUNT(*) FROM Customers WHERE customer_id = {id}").fetchone()
@@ -105,7 +105,7 @@ class Database:
 
     @staticmethod
     def deleteCustomer(id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
@@ -118,7 +118,7 @@ class Database:
 
     @staticmethod
     def checkIfCustomerAlreadyExistForLogin(Useremail, Userpassword):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         Customers = cursor.execute("SELECT * from Customers")
         for customer in Customers:
@@ -128,7 +128,7 @@ class Database:
     
     @staticmethod
     def checkIfCustomerAlreadyExistForSignUp(Useremail, Userpassword):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         Customers = cursor.execute("SELECT * from Customers")
         for customer in Customers:
@@ -140,7 +140,7 @@ class Database:
 
     @staticmethod
     def returnCustomerAccordingToSession(email, password):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         customer = cursor.execute(
             f"SELECT * from Customers where email = '{email}' and password = '{password}'")
@@ -148,23 +148,23 @@ class Database:
 
     @staticmethod
     def returnCustomers():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         customers = cursor.execute("SELECT * from Customers")
         return customers
 
     @staticmethod
-    def CreateTableFood():
-        connection = s.connect("foodSystem.db")
+    def CreateTablecar():
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
-        CREATE TABLE Food
+        CREATE TABLE car
     (
-        food_no          INTEGER PRIMARY KEY AUTOINCREMENT ,
-        food_image       VARCHAR(300) ,
-        food_price       int,
-        food_title       VARCHAR (100) ,
-        food_description VARCHAR (500) ,
+        car_no          INTEGER PRIMARY KEY AUTOINCREMENT ,
+        car_image       VARCHAR(300) ,
+        car_price       int,
+        car_title       VARCHAR (100) ,
+        car_description VARCHAR (500) ,
         admin_id         int NOT NULL,
         FOREIGN KEY (ADMIN_ID) REFERENCES ADMIN(ADMIN_ID)
     )
@@ -174,14 +174,14 @@ class Database:
         connection.close()
 
     @staticmethod
-    def InsertIntoFood(img, price, title, desc, admin_id):
-        connection = s.connect("foodSystem.db")
+    def InsertIntocar(img, price, title, desc, admin_id):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
         try:
             cursor.execute('''
-            INSERT INTO Food(food_image,food_price,food_title,food_description,admin_id) VALUES
+            INSERT INTO car(car_image,car_price,car_title,car_description,admin_id) VALUES
             (?, ?, ?, ?, ?)
             ''', (img, price, title, desc, admin_id))
             connection.commit()
@@ -190,36 +190,36 @@ class Database:
         connection.close()
 
     @staticmethod
-    def deleteFood(id):
-        connection = s.connect("foodSystem.db")
+    def deletecar(id):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
         try:
-            cursor.execute(f"DELETE FROM Food WHERE food_no = {id}")
+            cursor.execute(f"DELETE FROM car WHERE car_no = {id}")
             connection.commit()
         except:
             connection.rollback()
         connection.close()
 
     @staticmethod
-    def updateFood(id, title, price, desc, img):
-        connection = s.connect("foodSystem.db")
+    def updatecar(id, title, price, desc, img):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
         try:
             cursor.execute(
-                f"UPDATE FOOD SET food_title = '{title}' WHERE food_no = {id}")
+                f"UPDATE car SET car_title = '{title}' WHERE car_no = {id}")
             
             cursor.execute(
-                f"UPDATE FOOD SET food_price = '{price}' WHERE food_no = {id}")
+                f"UPDATE car SET car_price = '{price}' WHERE car_no = {id}")
             
             cursor.execute(
-                f"UPDATE FOOD SET food_description = '{desc}' WHERE food_no = {id}")
+                f"UPDATE car SET car_description = '{desc}' WHERE car_no = {id}")
             
             cursor.execute(
-                f"UPDATE FOOD SET food_image = '{img}' WHERE food_no = {id}")
+                f"UPDATE car SET car_image = '{img}' WHERE car_no = {id}")
             connection.commit()
 
         except:
@@ -227,63 +227,63 @@ class Database:
         connection.close()
 
     @ staticmethod
-    def FoodsFilterBy(filter):
-        connection = s.connect("foodSystem.db")
+    def carsFilterBy(filter):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
-        foods = cursor.execute("SELECT * FROM Food ORDER BY " + filter)
-        return foods
+        cars = cursor.execute("SELECT * FROM car ORDER BY " + filter)
+        return cars
 
     @ staticmethod
-    def returnFoodById(id):
-        connection = s.connect("foodSystem.db")
+    def returncarById(id):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
-        food = cursor.execute(f"SELECT * FROM Food WHERE food_no = {id}")
-        return food
+        car = cursor.execute(f"SELECT * FROM car WHERE car_no = {id}")
+        return car
 
     @ staticmethod
-    def foodIdExists(id):
-        connection = s.connect("foodSystem.db")
+    def carIdExists(id):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
-        foodcountList = cursor.execute(
-            f"SELECT COUNT(*) FROM Food WHERE food_no = {id}").fetchone()
-        return int(''.join([str(n) for n in foodcountList])) == 1
+        carcountList = cursor.execute(
+            f"SELECT COUNT(*) FROM car WHERE car_no = {id}").fetchone()
+        return int(''.join([str(n) for n in carcountList])) == 1
 
     @ staticmethod
-    def returnFoods():
-        connection = s.connect("foodSystem.db")
+    def returncars():
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
-        foods = cursor.execute("SELECT * from Food")
-        return foods
+        cars = cursor.execute("SELECT * from car")
+        return cars
 
     @staticmethod
-    def deleteAllFoods():
-        connection = s.connect("foodSystem.db")
+    def deleteAllcars():
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
         try:
-            cursor.execute(f"DELETE FROM Food")
+            cursor.execute(f"DELETE FROM car")
             connection.commit()
         except:
             connection.rollback()
         connection.close()
 
     @ staticmethod
-    def CreateTableORDERED():
-        connection = s.connect("foodSystem.db")
+    def CreateTableOrdered():
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
     CREATE TABLE Ordered (
         Order_Id        INTEGER PRIMARY KEY AUTOINCREMENT,
         customer_id	    int NOT NULL,
-        food_no	        int NOT NULL,
+        car_no	        int NOT NULL,
         pay_id	        int NOT NULL,
         ordered_date	TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         quantity	    int DEFAULT 0,
         pay_amount	    int NOT NULL CHECK("pay_amount" > 0),
         order_status    VARCHAR(10) default 'Pending' CHECK(order_status='Pending' OR order_status='Delivered'),    
         FOREIGN KEY(pay_id) REFERENCES Payment(pay_id) on delete set NULL,
-        FOREIGN KEY(food_no) REFERENCES FOOD(food_no) on delete cascade,
+        FOREIGN KEY(car_no) REFERENCES car(car_no) on delete cascade,
         FOREIGN KEY(customer_id) REFERENCES CUSTOMERS(customer_id) on delete cascade
     )
         ''')
@@ -292,15 +292,15 @@ class Database:
 
 
     # @staticmethod
-    # def InsertIntoORDERED(customerId, foodno, quantity, payId, pay_amount):
-    #     connection = s.connect("foodSystem.db")
+    # def InsertIntoORDERED(customerId, carno, quantity, payId, pay_amount):
+    #     connection = s.connect("carSystem.db")
     #     cursor = connection.cursor()
     #     cursor.execute("pragma foreign_keys=on")
     #     try:
     #         cursor.execute('''
-    #         INSERT INTO ORDERED(customer_id,food_no,quantity,pay_id, pay_amount) VALUES
+    #         INSERT INTO ORDERED(customer_id,car_no,quantity,pay_id, pay_amount) VALUES
     #         (?, ?, ?, ?, ?)
-    #         ''', (customerId, foodno, quantity, payId, pay_amount))
+    #         ''', (customerId, carno, quantity, payId, pay_amount))
     #         cursor.execute("ROLLBACK TO SAVEPOINT restart_from_payment")
     #         connection.commit()
     #     except:
@@ -309,7 +309,7 @@ class Database:
 
     @staticmethod
     def updateOrderStatusToDelivered(order_id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         try:
@@ -321,7 +321,7 @@ class Database:
 
     @staticmethod
     def deleteOrderWithOrderId(order_id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         try:
@@ -333,17 +333,17 @@ class Database:
 
     @staticmethod
     def returnOrderDetailsOfCustomerWithJoins(customerId):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         orderDetails = cursor.execute(f'''
-        SELECT ORDERED.Order_ID, FOOD.food_title, FOOD.food_price, FOOD.food_image, ORDERED.ordered_date,
+        SELECT ORDERED.Order_ID, car.car_title, car.car_price, car.car_image, ORDERED.ordered_date,
         ORDERED.quantity, ORDERED.pay_amount, Payment.pay_number, ORDERED.order_status FROM ORDERED
         INNER JOIN CUSTOMERS
         ON ORDERED.customer_id = CUSTOMERS.customer_id
         INNER JOIN PAYMENT
         ON ORDERED.pay_id = PAYMENT.pay_id
-        INNER JOIN FOOD
-        ON ORDERED.food_no = FOOD.food_no
+        INNER JOIN car
+        ON ORDERED.car_no = car.car_no
         where CUSTOMERS.customer_id = '{customerId}'
         order by ORDERED.Order_ID DESC
         ''')
@@ -351,24 +351,24 @@ class Database:
 
     @staticmethod
     def returnAllOrderDetailsOfCustomerWithJoins():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         orderDetails = cursor.execute(f'''
-        SELECT Customers.first_name, Customers.last_name, ORDERED.Order_ID, FOOD.food_title, FOOD.food_price, FOOD.food_image, ORDERED.ordered_date,
+        SELECT Customers.first_name, Customers.last_name, ORDERED.Order_ID, car.car_title, car.car_price, car.car_image, ORDERED.ordered_date,
         ORDERED.quantity, ORDERED.pay_amount, Payment.pay_number, ORDERED.order_status FROM ORDERED
         INNER JOIN CUSTOMERS
         ON ORDERED.customer_id = CUSTOMERS.customer_id
         INNER JOIN PAYMENT
         ON ORDERED.pay_id = PAYMENT.pay_id
-        INNER JOIN FOOD
-        ON ORDERED.food_no = FOOD.food_no
+        INNER JOIN car
+        ON ORDERED.car_no = car.car_no
         order by ORDERED.Order_ID DESC
         ''')
         return orderDetails
 
     @ staticmethod
     def OrderIdExists(id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         OrderCountList = cursor.execute(
             f"SELECT COUNT(*) FROM Ordered WHERE Order_ID = {id}").fetchone()
@@ -376,14 +376,14 @@ class Database:
 
     @ staticmethod
     def returnORDERED():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         ORDERED = cursor.execute("SELECT * from ORDERED")
         return ORDERED
 
     @ staticmethod
     def CreateTablePayment():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
         CREATE TABLE PAYMENT
@@ -400,7 +400,7 @@ class Database:
 
     # @staticmethod
     # def InsertIntoPayment(number, customer_id): #where customer_id = 1 last row id only
-    #     connection = s.connect('foodSystem.db')
+    #     connection = s.connect('carSystem.db')
     #     cursor = connection.cursor()
     #     cursor.execute("pragma foreign_keys=on")
     #     cursor.execute("BEGIN TRANSACTION")
@@ -424,8 +424,8 @@ class Database:
     #     return already, pay_id
 
     @staticmethod
-    def insertIntoPaymentThenOrders(number, customer_id, foodno, quantity, pay_amount):
-        connection = s.connect('foodSystem.db')
+    def insertIntoPaymentThenOrders(number, customer_id, carno, quantity, pay_amount):
+        connection = s.connect('carSystem.db')
         # cursor = connection.cursor()
         connection.execute("pragma foreign_keys=on")
         connection.execute("BEGIN TRANSACTION")
@@ -449,9 +449,9 @@ class Database:
                 # cursor2 = connection.cursor()
                 connection.execute("pragma foreign_keys=on")
                 connection.execute('''
-                INSERT INTO ORDERED(customer_id,food_no,quantity,pay_id, pay_amount) VALUES
+                INSERT INTO ORDERED(customer_id,car_no,quantity,pay_id, pay_amount) VALUES
                 (?, ?, ?, ?, ?)
-                ''', (customer_id, foodno, quantity, StorePay_id[0], pay_amount))
+                ''', (customer_id, carno, quantity, StorePay_id[0], pay_amount))
                 connection.commit()
             return StoreAlready, StorePay_id
         except s.Error as e:
@@ -460,7 +460,7 @@ class Database:
 
     @ staticmethod
     def CreateTableReviews():
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
         CREATE TABLE Reviews
@@ -477,7 +477,7 @@ class Database:
         connection.close()
     @staticmethod
     def InsertIntoReviews(rate, revDesc, ord_id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute("pragma foreign_keys=on")
         cursor.execute("BEGIN TRANSACTION")
@@ -501,8 +501,8 @@ class Database:
         # return lastId
 
     @staticmethod
-    def returnAllReviewsOfFood_noWithJoins(food_no):
-        connection = s.connect("foodSystem.db")
+    def returnAllReviewsOfcar_noWithJoins(car_no):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         reviews = cursor.execute(f'''
             SELECT c.first_name, c.last_name, r.review_rate, r.review_description from Reviews r
@@ -510,31 +510,31 @@ class Database:
             on o.Order_Id = r.Order_Id
             INNER join Customers c
             on o.customer_id = c.customer_id
-            inner join Food f
-            on o.food_no = f.food_no
-            where f.food_no = '{food_no}'
+            inner join car f
+            on o.car_no = f.car_no
+            where f.car_no = '{car_no}'
         ''')
         return reviews
 
     @staticmethod
-    def returnAllReviewsRatesAndFood_nos():
-        connection = s.connect("foodSystem.db")
+    def returnAllReviewsRatesAndcar_nos():
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         reviews = cursor.execute(f'''
-            SELECT f.food_no, avg(r.review_rate), count(*) from Reviews r
+            SELECT f.car_no, avg(r.review_rate), count(*) from Reviews r
             inner join Ordered o
             on o.Order_Id = r.Order_Id
             INNER join Customers c
             on o.customer_id = c.customer_id
-            inner join Food f
-            on o.food_no = f.food_no
-            GROUP by f.food_no
+            inner join car f
+            on o.car_no = f.car_no
+            GROUP by f.car_no
         ''')
         return reviews
 
     @staticmethod
-    def returnReviewsOfFood_noWithJoins(food_id):
-        connection = s.connect("foodSystem.db")
+    def returnReviewsOfcar_noWithJoins(car_id):
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         reviews = cursor.execute(f'''
             SELECT avg(r.review_rate), count(*) from Reviews r
@@ -542,38 +542,38 @@ class Database:
             on o.Order_Id = r.Order_Id
             INNER join Customers c
             on o.customer_id = c.customer_id
-            inner join Food f
-            on o.food_no = f.food_no
-            GROUP by f.food_no
-            having f.food_no = '{food_id}'
+            inner join car f
+            on o.car_no = f.car_no
+            GROUP by f.car_no
+            having f.car_no = '{car_id}'
         ''')
         return reviews
 
     @staticmethod
-    def FoodsFilterByOrderRatings():
-        connection = s.connect("foodSystem.db")
+    def carsFilterByOrderRatings():
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
-        foods = cursor.execute('''
-            SELECT f.food_no, f.food_image, f.food_price,f.food_title, f.food_description, f.admin_id
-            from Food f left join Ordered o
-            on f.food_no = o.food_no
+        cars = cursor.execute('''
+            SELECT f.car_no, f.car_image, f.car_price,f.car_title, f.car_description, f.admin_id
+            from car f left join Ordered o
+            on f.car_no = o.car_no
             left join Reviews r
             on r.Order_Id = o.Order_Id
-            group by f.food_no
+            group by f.car_no
             order by avg(review_rate) desc;
         ''')
-        return foods
+        return cars
 
     @ staticmethod
     def returnTable(table):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         tableTuples = cursor.execute(f"SELECT * from {table}")
         return tableTuples
 
     @staticmethod
     def testing(number,customer_id):
-        connection = s.connect("foodSystem.db")
+        connection = s.connect("carSystem.db")
         cursor = connection.cursor()
         cursor.execute('''
         INSERT INTO Payment(pay_number, customer_id) VALUES
@@ -587,7 +587,7 @@ class Database:
 
     # @staticmethod
     # def testing2(number,customer_id):
-    #     connection = s.connect("foodSystem.db")
+    #     connection = s.connect("carSystem.db")
     #     cursor = connection.cursor()
     #     cursor.execute(f'''
     #     insert into PAYMENT (pay_number, customer_id)
@@ -604,9 +604,25 @@ class Database:
 
     #     return already, pay_id
 
+try:
+    Database.returnAllReviewsRatesAndcar_nos()
+    Database.CreateTableReviews()
+except:
+    pass
 
+# import sqlite3 as s
 
+# connection = s.connect("carSystem.db")
+# cursor = connection.cursor()
 
+# # Get schema of 'Ordered' table
+# cursor.execute('PRAGMA table_info(Ordered)')
+# schema = cursor.fetchall()
 
+# # Print schema info
+# print("Schema of 'Ordered' table:")
+# for column in schema:
+#     # column format: (cid, name, type, notnull, dflt_value, pk)
+#     print(f"Column: {column[1]}, Type: {column[2]}, Not Null: {bool(column[3])}, Primary Key: {bool(column[5])}")
 
-        
+# connection.close()

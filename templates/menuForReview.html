@@ -2,12 +2,12 @@
 {% block title %}Reviews{% endblock title %}
 {% block body %}
 
-    <h1 style="text-align: center;">See Reviews on Foods</h1>
-<div class="AllFoodLinks">
+    <h1 style="text-align: center;">See Reviews on Cars</h1>
+<div class="AllCarLinks">
     <br>
-    {% for  i in range(foods|length) %}
-    <div class="foodLink">
-        <a href="/allreviews/{{ foods[i][0] }}">{{ foods[i][3] }}</a>
+    {% for  i in range(Cars|length) %}
+    <div class="CarLink">
+        <a href="/allreviews/{{ Cars[i][0] }}">{{ Cars[i][3] }}</a>
     </div>
     <br>
     {% endfor %}

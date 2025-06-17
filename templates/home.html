@@ -1,12 +1,115 @@
 {% extends 'base.html' %}
+
 {% block title %}Home{% endblock title %}
+
 {% block body %}
 
-<div class="sendToMenu">
-
-<h1>Welcome to Foodie</h1>
-<p>Go checkout new products right in our store.</p>
-<span><a href="{{ url_for('menu') }}"> <button>MENU</button></a></span>
+<!-- Main Store Welcome Section -->
+<div class="sendToMenu" style="text-align: center; padding: 40px;">
+    <h1>Welcome to Car Racers</h1>
+    <p>Go checkout new products right in our store.</p>
+    <span>
+        <a href="{{ url_for('menu') }}">
+            <button style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px;">CATALOG</button>
+        </a>
+    </span>
 </div>
+
+<!-- Chatbot Floating Widget (Bottom Left) -->
+<div id="chat_container" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 360px;
+    z-index: 9999;
+    font-family: Arial, sans-serif;
+">
+
+    <div id="chat_screen" class="cw_body is-visible" style="
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        overflow: hidden;
+    ">
+        <!-- Chat Header -->
+        <div id="chat_header" style="
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        ">
+            🤖 Chatbot Hỗ Trợ
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="chat_history" class="chat_conversion" style="
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        ">
+            <div id="loadingOldMsg" style="display:none;height: 30px;text-align: center;">Đang tải tin nhắn...</div>
+        </div>
+
+        <!-- Chat Input -->
+        <div id="chat_input_container" style="display: flex; padding: 10px; border-top: 1px solid #ccc; background: #fff;">
+            <input type="text" id="chat_input" placeholder="Nhập câu hỏi của bạn..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <button id="send_button" style="padding: 8px 12px; background: #28a745; color: white; border: none; border-radius: 4px; margin-left: 6px;">Gửi</button>
+        </div>
+    </div>
+</div>
+
+<!-- Chatbot JavaScript -->
+<script>
+    const chatHistory = document.getElementById("chat_history");
+    const inputField = document.getElementById("chat_input");
+    const sendBtn = document.getElementById("send_button");
+
+    sendBtn.addEventListener("click", sendMessage);
+    inputField.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") sendMessage();
+    });
+
+    async function sendMessage() {
+        const userMessage = inputField.value.trim();
+        if (!userMessage) return;
+
+        appendMessage(userMessage, "user");
+        inputField.value = "";
+
+        try {
+            const response = await fetch("/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: userMessage })
+            });
+
+            const data = await response.json();
+            const botReply = data.answer || "Không thể tạo câu trả lời.";
+            appendMessage(botReply, "bot");
+
+        } catch (error) {
+            appendMessage("Đã xảy ra lỗi khi gửi yêu cầu.", "bot");
+        }
+    }
+
+    function appendMessage(message, sender) {
+        const msgDiv = document.createElement("div");
+        msgDiv.classList.add(sender === "user" ? "user-msg" : "bot-msg");
+        msgDiv.style.marginBottom = "10px";
+        msgDiv.style.padding = "8px 12px";
+        msgDiv.style.borderRadius = "6px";
+        msgDiv.style.maxWidth = "90%";
+        msgDiv.style.backgroundColor = sender === "user" ? "#e0f0ff" : "#eaf7ea";
+        msgDiv.style.color = sender === "user" ? "#0056b3" : "#2c662d";
+        msgDiv.style.alignSelf = sender === "user" ? "flex-end" : "flex-start";
+        msgDiv.style.wordWrap = "break-word";
+        msgDiv.innerText = message;
+
+        chatHistory.appendChild(msgDiv);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+</script>
 
 {% endblock body %}

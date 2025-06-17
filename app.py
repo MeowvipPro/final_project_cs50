@@ -1,9 +1,10 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session, abort
+from flask import Flask, render_template, redirect, request, url_for, session, abort, jsonify
 from werkzeug.utils import secure_filename
 from database import Database
-db = Database()
+from bot import generate_answer
 
+db = Database()
 
 def checkAppropriateFile(file):
     ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
@@ -13,19 +14,11 @@ def checkAppropriateFile(file):
     return False
 
 db.insertIntoAdmin(1, 'huy@gmail.com', 'huy')
-# db.CreateTableAdmin()
-# db.CreateTablePayment()
-# db.CreateTableCustomer()
-# db.CreateTableFood()
-# db.CreateTableORDERED()
-# db.CreateTableReviews()
-
 
 app = Flask(__name__)
 app.secret_key = '123'
 
-app.config['UPLOAD_FOLDER'] = '/Users/huythanhle/FP/static/images'
-
+app.config['UPLOAD_FOLDER'] = '/Users/huy.let3/Desktop/cs50/static/images'
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -99,13 +92,13 @@ def home():
 @app.route('/menu')
 def menu():
     if "Useremail" and "Userpassword" in session:
-        foods = db.returnFoods()
-        foods = foods.fetchall()
+        cars = db.returncars()
+        cars = cars.fetchall()
 
-        foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-        foodnosAndRates = foodnosAndRates.fetchall()
+        carnosAndRates = db.returnAllReviewsRatesAndcar_nos()
+        carnosAndRates = carnosAndRates.fetchall()
 
-        return render_template("menu.html", foods=foods, foodnosAndRates=foodnosAndRates)
+        return render_template("menu.html", cars=cars, carnosAndRates=carnosAndRates)
     return redirect(url_for('login'))
 
 
@@ -124,18 +117,18 @@ def account():
 def filter(filter):
     if "Useremail" and "Userpassword" in session:
         if filter == 'filterByPrice':
-            foods = db.FoodsFilterBy("food_price")
-            foods = foods.fetchall()
-            foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-            foodnosAndRates = foodnosAndRates.fetchall()        
-            return render_template('menu.html', foods=foods, foodnosAndRates=foodnosAndRates)
+            cars = db.carsFilterBy("car_price")
+            cars = cars.fetchall()
+            carnosAndRates = db.returnAllReviewsRatesAndcar_nos()
+            carnosAndRates = carnosAndRates.fetchall()        
+            return render_template('menu.html', cars=cars, carnosAndRates=carnosAndRates)
 
         elif filter == 'filterByRating':
-            foods = db.FoodsFilterByOrderRatings()
-            foods = foods.fetchall()
-            foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-            foodnosAndRates = foodnosAndRates.fetchall()
-            return render_template('menu.html', foods=foods, foodnosAndRates=foodnosAndRates)
+            cars = db.carsFilterByOrderRatings()
+            cars = cars.fetchall()
+            carnosAndRates = db.returnAllReviewsRatesAndcar_nos()
+            carnosAndRates = carnosAndRates.fetchall()
+            return render_template('menu.html', cars=cars, carnosAndRates=carnosAndRates)
         return redirect(url_for('menu'))
     return redirect(url_for('login'))
 
@@ -175,8 +168,8 @@ def allOrders():
         return render_template('AllorderDetails.html', orderDetails=orderDetails)
     return redirect(url_for('adminLogin'))
 
-@app.route('/menu/<int:food_id>', methods=['POST', 'GET'])
-def product(food_id):
+@app.route('/menu/<int:car_id>', methods=['POST', 'GET'])
+def product(car_id):
     if "Useremail" and "Userpassword" in session:
         if request.method == 'POST':
             quantity = request.form['quantity']
@@ -188,7 +181,7 @@ def product(food_id):
             customer = customer.fetchone()
             customerId = customer[0]
 
-            already, pay_id = db.insertIntoPaymentThenOrders(pay_number,customerId, food_id, quantity, pay_amount)
+            already, pay_id = db.insertIntoPaymentThenOrders(pay_number,customerId, car_id, quantity, pay_amount)
 
             if already == None:
                 return redirect(url_for('orderDetails', flag=False))
@@ -197,14 +190,14 @@ def product(food_id):
             # we can cancel order here so we have to delete those things
             #db.updateCustomerWithPayId(customerId, payId)
         else:
-            if db.foodIdExists(food_id):
-                food = db.returnFoodById(food_id)
-                food = food.fetchone()
-                reviewsAndCount = db.returnReviewsOfFood_noWithJoins(food_id)
+            if db.carIdExists(car_id):
+                car = db.returncarById(car_id)
+                car = car.fetchone()
+                reviewsAndCount = db.returnReviewsOfcar_noWithJoins(car_id)
                 reviewsAndCount = reviewsAndCount.fetchone()
 
-                allRevs = db.returnAllReviewsOfFood_noWithJoins(food_id).fetchall()
-                return render_template("productdetails.html", food=food, reviewsAndCount=reviewsAndCount, allRevs=allRevs)
+                allRevs = db.returnAllReviewsOfcar_noWithJoins(car_id).fetchall()
+                return render_template("productdetails.html", car=car, reviewsAndCount=reviewsAndCount, allRevs=allRevs)
             else:
                 abort(404)
     return redirect(url_for('login'))
@@ -235,21 +228,21 @@ def adminLogin():
 @app.route('/admin/home')
 def admin():
     if "email" and "password" in session:
-        foods = db.returnFoods()
-        foods = foods.fetchall()
-        foodnosAndRates = db.returnAllReviewsRatesAndFood_nos()
-        foodnosAndRates = foodnosAndRates.fetchall()
-        return render_template('admin.html', foods=foods, foodnosAndRates=foodnosAndRates)
+        cars = db.returncars()
+        cars = cars.fetchall()
+        carnosAndRates = db.returnAllReviewsRatesAndcar_nos()
+        carnosAndRates = carnosAndRates.fetchall()
+        return render_template('admin.html', cars=cars, carnosAndRates=carnosAndRates)
     return redirect(url_for('adminLogin'))
 
 
-@app.route('/addfood', methods=['POST', 'GET'])
-def addFood():
+@app.route('/addcar', methods=['POST', 'GET'])
+def addcar():
     if "email" and "password" in session:
         if request.method == 'POST':
-            foodTitle = request.form['foodTitle']
-            foodPrice = request.form['foodPrice']
-            foodDesc = request.form['food_desc']
+            carTitle = request.form['CarTitle']
+            carPrice = request.form['CarPrice']
+            carDesc = request.form['Car_desc']
             imageFile = request.files['imageFile']
 
             if imageFile.filename == '':
@@ -258,32 +251,32 @@ def addFood():
                 Securefilename = secure_filename(imageFile.filename)
                 imageFile.save(os.path.join(
                     app.config['UPLOAD_FOLDER'], Securefilename))
-                db.InsertIntoFood(Securefilename,
-                                  foodPrice, foodTitle, foodDesc, 1)
+                db.InsertIntocar(Securefilename,
+                                  carPrice, carTitle, carDesc, 1)
             return redirect(url_for('admin'))
         else:
-            return render_template('addFood.html')
+            return render_template('addcar.html')
     return redirect(url_for("adminLogin"))
 
 
 @app.route('/delete/<int:id>')
-def delFood(id):
+def delcar(id):
     if "email" and "password" in session:
-        if db.foodIdExists(id):
-            db.deleteFood(id)
+        if db.carIdExists(id):
+            db.deletecar(id)
             return redirect(url_for('admin'))
         else:
             abort(404)
     return redirect(url_for("adminLogin"))
 
 @app.route('/edit/<int:id>', methods=['POST', 'GET'])
-def editFood(id):
+def editcar(id):
     if "email" and "password" in session:
-        if db.foodIdExists(id):
+        if db.carIdExists(id):
             if request.method == 'POST':
-                foodTitle = request.form['foodTitle']
-                foodPrice = request.form['foodPrice']
-                foodDesc = request.form['food_desc']
+                carTitle = request.form['carTitle']
+                carPrice = request.form['carPrice']
+                carDesc = request.form['car_desc']
                 imageFile = request.files['imageFile']
                 if imageFile.filename == '':
                     return redirect(request.url)
@@ -291,12 +284,14 @@ def editFood(id):
                     Securefilename = secure_filename(imageFile.filename)
                     imageFile.save(os.path.join(
                         app.config['UPLOAD_FOLDER'], Securefilename))
-                db.updateFood(id, foodTitle, foodPrice, foodDesc, Securefilename)
+
+
+                db.updatecar(id, carTitle, carPrice, carDesc, Securefilename)
                 return redirect(url_for('admin'))
 
-            food = db.returnFoodById(id)
-            food = food.fetchone()
-            return render_template('updateFood.html', food=food)
+            car = db.returncarById(id)
+            car = car.fetchone()
+            return render_template('updatecar.html', car=car)
         else:
             abort(404)
     return redirect(url_for("adminLogin"))
@@ -304,7 +299,7 @@ def editFood(id):
 @app.route('/deleteall')
 def deleteAll():
     if "email" and "password" in session:
-        db.deleteAllFoods()
+        db.deleteAllcars()
         return redirect(url_for('admin'))
     return redirect(url_for("adminLogin"))
 
@@ -349,17 +344,27 @@ def Review(order_id):
 @app.route('/menufor_review')
 def reviewMenu():
     if "email" and "password" in session:
-        foods = db.returnFoods()
-        foods = foods.fetchall()
-        return render_template('menuForReview.html', foods=foods)
+        cars = db.returncars()
+        cars = cars.fetchall()
+        return render_template('menuForReview.html', cars=cars)
     return redirect(url_for("adminLogin"))
 
-@app.route('/allreviews/<int:food_no>')
-def allReviews(food_no):
+@app.route("/generate", methods=["POST"])
+def generate():
+    data = request.get_json()
+    query = data.get("query", "")
+    try:
+        answer = generate_answer(query)
+        return jsonify({"answer": answer})
+    except Exception as e:
+        return jsonify({"answer": "Lỗi khi tạo câu trả lời: " + str(e)}), 500
+
+@app.route('/allreviews/<int:car_no>')
+def allReviews(car_no):
     if "email" and "password" in session:
-        allreviews = db.returnAllReviewsOfFood_noWithJoins(food_no)
+        allreviews = db.returnAllReviewsOfcar_noWithJoins(car_no)
         allreviews = allreviews.fetchall()
-        reviewsAndCount = db.returnReviewsOfFood_noWithJoins(food_no)
+        reviewsAndCount = db.returnReviewsOfcar_noWithJoins(car_no)
         reviewsAndCount = reviewsAndCount.fetchone()
         return render_template('allReviews.html', allreviews=allreviews, reviewsAndCount=reviewsAndCount)
     return redirect(url_for("adminLogin"))
@@ -386,4 +391,4 @@ def page_not_found(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)

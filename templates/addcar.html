@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/adminStyle.css') }}">
-    <title>Add Food</title>
+    <title>Add CAR</title>
 </head>
 <body>
     <div class="FormContent">
-    <h2>Add Food</h2>
+    <h2>Add CAR</h2>
     <form action="#" method="post" enctype="multipart/form-data">
-        <input type="text" name="foodTitle" id="foodTitle" placeholder="Food Title" required><br><br>
+        <input type="text" name="CarTitle" id="CarTitle" placeholder="Car Title" required><br><br>
         <!--Price taken as a Text-->
-        <input type="number" pattern="[0-9]*" min="1" name="foodPrice" id="foodPrice" placeholder="Food Price" required><br><br>
-        <textarea name="food_desc" id="food_desc" cols="" rows="10" placeholder="Food Description" required></textarea><br><br>
+        <input type="number" pattern="[0-9]*" min="1" name="CarPrice" id="CarPrice" placeholder="Car Price" required><br><br>
+        <textarea name="Car_desc" id="Car_desc" cols="" rows="10" placeholder="Car Description" required></textarea><br><br>
         <input type="file" name="imageFile" id="imageFile" required><br><br>
         <input type="submit" value="ADD PRODUCT">
     </form>
