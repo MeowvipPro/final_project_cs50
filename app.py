@@ -9,8 +9,8 @@ db = Database()
 def checkAppropriateFile(file):
     ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
     for f in ALLOWED_EXTENSIONS:
-        if file.endswith(f):
-            return True
+            if file.endswith(f):
+                return True
     return False
 
 db.insertIntoAdmin(1, 'huy@gmail.com', 'huy')
