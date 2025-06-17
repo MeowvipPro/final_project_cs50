@@ -91,7 +91,7 @@ def generate_answer(query: str) -> str:
     # Tạo văn bản bằng model
     outputs = model.generate(
         **input_ids,
-        max_new_tokens=128,
+        max_new_tokens=128,load_in_4bit=False,
         no_repeat_ngram_size=7,  # Ngăn chặn lặp lại các cụm từ 7 gram
         do_sample=True,   # Kích hoạt chế độ tạo văn bản dựa trên lấy mẫu. Trong chế độ này, model sẽ chọn ngẫu nhiên token tiếp theo dựa trên xác suất được tính từ phân phối xác suất của các token.
         temperature=0.2,  # Giảm temperature để kiểm soát tính ngẫu nhiên
