@@ -10,30 +10,25 @@ embedd_model = SentenceTransformer("hiieu/halong_embedding")
 # --- Giai đoạn 1: Tạo docs_embedding ---
 # Dữ liệu thử nghiệm được lấy từ ví dụ xây dựng RAG system với function calling được chia sẻ tại bài viết: https://viblo.asia/p/quy-trinh-xay-dung-he-thong-rag-tich-hop-function-calling-with-source-code-vlZL98GZJQK
 docs = [
-    "Xe sedan - thông tin cơ bản: Tên sản phẩm: Toyota Vios G 1.5L AT; Thương hiệu: Toyota; Nhà sản xuất: Toyota Việt Nam; Mã sản phẩm: VIOSG15AT; Loại sản phẩm: Sedan, Xe du lịch; Mô tả ngắn: Sedan nhỏ gọn, thiết kế thời trang, tiết kiệm nhiên liệu, vận hành bền bỉ, phù hợp di chuyển trong thành phố và ngoại ô.",
+    # --- Toyota Corolla Cross ---
+    "Toyota Corolla Cross là mẫu SUV đô thị 5 chỗ, thiết kế hiện đại, vận hành êm ái và tiết kiệm nhiên liệu. Xe trang bị công nghệ an toàn Toyota Safety Sense, phù hợp cho cả gia đình và cá nhân sử dụng hàng ngày.",
+    "Toyota Corolla Cross sử dụng động cơ xăng 1.8L hoặc hybrid, hộp số CVT mượt mà, tiết kiệm nhiên liệu chỉ khoảng 4.5L/100km cho bản hybrid. Xe có chế độ lái Eco, Sport giúp tùy chỉnh trải nghiệm.",
+    "Trang bị nổi bật bao gồm: hệ thống cảnh báo điểm mù, cảnh báo phương tiện cắt ngang khi lùi, ga tự động thích ứng và phanh khẩn cấp tự động. Màn hình giải trí 9 inch, kết nối Apple CarPlay và Android Auto.",
+    "Corolla Cross có thiết kế nội thất hiện đại với ghế da, cửa sổ trời, điều hòa tự động 2 vùng. Khoang hành lý rộng rãi 440L, phù hợp đi xa hoặc dùng hằng ngày.",
 
-    "Xe sedan - thông tin chi tiết: - Động cơ: 1.5L Dual VVT-i, xăng. - Hộp số: Tự động 5 cấp. - Mức tiêu thụ nhiên liệu: 5.7L/100km (kết hợp). - Trang bị: Khởi động nút bấm, chìa khóa thông minh, ABS, EBD, camera lùi, màn hình cảm ứng 7 inch. - Màu sắc: Bạc, đen, trắng, đỏ. - Hướng dẫn sử dụng: Thay dầu định kỳ mỗi 5.000 km; đảo lốp sau mỗi 10.000 km.",
+    # --- Hyundai Creta ---
+    "Hyundai Creta là mẫu SUV cỡ nhỏ với thiết kế trẻ trung, nội thất rộng rãi và tiện nghi. Xe trang bị nhiều công nghệ hiện đại như màn hình cảm ứng lớn, camera lùi và hỗ trợ lái an toàn.",
+    "Hyundai Creta được trang bị động cơ Smartstream 1.5L kết hợp hộp số iVT, tiết kiệm nhiên liệu khoảng 6.3L/100km. Xe có hệ thống treo tinh chỉnh cho độ êm ái cao.",
+    "Creta nổi bật với gói công nghệ an toàn SmartSense gồm hỗ trợ giữ làn, cảnh báo va chạm trước, hỗ trợ tránh va chạm điểm mù. Xe có màn hình kỹ thuật số 10.25 inch.",
+    "Nội thất Creta hướng đến người trẻ với ghế bọc da thể thao, đèn viền nội thất, sạc không dây, điều hòa tự động có lọc bụi mịn PM2.5. Khoang ghế sau có cửa gió riêng.",
 
-    "Xe sedan - thông tin bổ sung: Giá bán: 520.000.000 VNĐ; Tình trạng tồn kho: Còn hàng; Khuyến mãi: Tặng 1 năm bảo hiểm và bộ thảm sàn; Đánh giá của khách hàng: 4.6/5 sao - Lái êm, tiết kiệm nhiên liệu, kiểu dáng thanh lịch.",
-
-    "Xe SUV - thông tin cơ bản: Tên sản phẩm: Mazda CX-5 2.0 Luxury; Thương hiệu: Mazda; Nhà sản xuất: Thaco Auto; Mã sản phẩm: CX520LUX; Loại sản phẩm: SUV, Xe gia đình; Mô tả ngắn: SUV 5 chỗ với thiết kế thể thao, động cơ mạnh mẽ, công nghệ thông minh, thích hợp sử dụng hằng ngày và du lịch.",
-
-    "Xe SUV - thông tin chi tiết: - Động cơ: 2.0L Skyactiv-G, xăng. - Hộp số: Tự động 6 cấp, có chế độ thể thao. - Mức tiêu thụ nhiên liệu: 6.9L/100km (kết hợp). - Trang bị: i-Stop, cruise control, màn hình 10.25 inch, camera 360 độ. - Màu sắc: Xanh đậm, xám, đen, trắng, đỏ. - Hướng dẫn sử dụng: Kiểm tra động cơ mỗi 10.000 km; kiểm tra phanh mỗi 15.000 km.",
-
-    "Xe SUV - thông tin bổ sung: Giá bán: 880.000.000 VNĐ; Tình trạng tồn kho: Còn hàng; Khuyến mãi: Giảm 30 triệu VNĐ và miễn phí bảo dưỡng lần đầu; Đánh giá của khách hàng: 4.8/5 sao - Nội thất rộng, sang trọng, lái đầm chắc.",
-
-    "Xe bán tải - thông tin cơ bản: Tên sản phẩm: Ford Ranger Wildtrak 2.0 Bi-Turbo; Thương hiệu: Ford; Nhà sản xuất: Ford Việt Nam; Mã sản phẩm: RANGERWILD20BT; Loại sản phẩm: Xe bán tải; Mô tả ngắn: Xe bán tải cao cấp, công nghệ hiện đại, khả năng off-road mạnh mẽ, thiết kế nam tính.",
-
-    "Xe bán tải - thông tin chi tiết: - Động cơ: 2.0L Bi-Turbo diesel. - Hộp số: Tự động 10 cấp. - Hệ dẫn động: 4 bánh toàn thời gian. - Trang bị: Cruise control chủ động, hỗ trợ giữ làn đường, màn hình 12 inch, Apple CarPlay không dây. - Màu sắc: Cam, đen, trắng, bạc. - Hướng dẫn sử dụng: Thay lọc dầu diesel mỗi 10.000 km; kiểm tra gầm xe nếu đi địa hình xấu.",
-
-    "Xe bán tải - thông tin bổ sung: Giá bán: 1.160.000.000 VNĐ; Tình trạng tồn kho: Còn hàng; Khuyến mãi: Tặng nắp thùng cuộn và camera lùi; Đánh giá của khách hàng: 4.9/5 sao - Mạnh mẽ, nhiều công nghệ, phù hợp kinh doanh và du lịch.",
-
-    "Xe điện - thông tin cơ bản: Tên sản phẩm: VinFast VF 5 Plus; Thương hiệu: VinFast; Nhà sản xuất: VinFast; Mã sản phẩm: VF5PLUS; Loại sản phẩm: Xe điện, Xe đô thị; Mô tả ngắn: Hatchback điện giá rẻ, thiết kế nhỏ gọn, tiện lợi di chuyển nội thành, không phát thải.",
-
-    "Xe điện - thông tin chi tiết: - Pin: 37.23 kWh lithium-ion. - Quãng đường: Lên tới 300 km/lần sạc. - Thời gian sạc: Khoảng 5.5 tiếng với sạc AC. - Trang bị: Kết nối thông minh, eSIM, điều khiển qua ứng dụng, cảm biến lùi. - Màu sắc: Vàng, trắng, đỏ, xanh bạc hà, đen. - Hướng dẫn sử dụng: Kiểm tra pin định kỳ 12 tháng; cập nhật phần mềm qua app.",
-
-    "Xe điện - thông tin bổ sung: Giá bán: 458.000.000 VNĐ; Tình trạng tồn kho: Còn hàng; Khuyến mãi: Tặng bộ sạc tại nhà và miễn phí bảo dưỡng 3 năm; Đánh giá của khách hàng: 4.7/5 sao - Thiết kế đẹp, thân thiện môi trường, dễ điều khiển trong thành phố."
+    # --- Kia Sportage ---
+    "Kia Sportage là mẫu SUV 5 chỗ với thiết kế thể thao, mạnh mẽ và không gian nội thất hiện đại. Xe phù hợp cho cả di chuyển trong thành phố lẫn hành trình đường dài nhờ khả năng vận hành ổn định và tiết kiệm nhiên liệu.",
+    "Kia Sportage trang bị động cơ 2.0L xăng hoặc diesel, hộp số tự động 6–8 cấp, tuỳ chọn hệ dẫn động AWD. Mức tiêu hao nhiên liệu dao động từ 6.5–7.5L/100km tùy phiên bản.",
+    "Hệ thống an toàn ADAS gồm giữ làn, cảnh báo tiền va chạm, phanh khẩn cấp, camera 360 độ, hiển thị thông tin trên kính lái HUD. Xe có chế độ lái địa hình tùy chỉnh.",
+    "Nội thất Sportage được thiết kế dạng cong liền mạch với màn hình đôi 12.3 inch, ghế chỉnh điện có sưởi/làm mát, hệ thống âm thanh Harman Kardon cao cấp."
 ]
+
 # Tạo embeddings cho các tài liệu và lưu vào biến docs_embeddings
 docs_embeddings = embedd_model.encode(docs)
 
@@ -63,21 +58,12 @@ if torch.cuda.is_available():
 
 # Định dạng prompt cho model
 prompt = """
-### Chat_Bot_Car_Infromation:
+Chat_Bot_Car_Infromation:
 {}
 """
 
 # Hàm thực hiện quy trình RAG
 def generate_answer(query: str) -> str:
-    """
-    Thực hiện quy trình Retrieval Augmented Generation (RAG) để trả lời câu hỏi.
-
-    Args:
-        query: Câu hỏi cần trả lời.
-
-    Returns:
-        Câu trả lời được tạo bởi model RAG.
-    """
     # Truy xuất tài liệu liên quan
     relevant_docs = retrieve_relevant_docs(query, top_k=3)
     # Định dạng input text
@@ -91,7 +77,7 @@ def generate_answer(query: str) -> str:
     # Tạo văn bản bằng model
     outputs = model.generate(
         **input_ids,
-        max_new_tokens=128,load_in_4bit=False,
+        max_new_tokens=128,
         no_repeat_ngram_size=7,  # Ngăn chặn lặp lại các cụm từ 7 gram
         do_sample=True,   # Kích hoạt chế độ tạo văn bản dựa trên lấy mẫu. Trong chế độ này, model sẽ chọn ngẫu nhiên token tiếp theo dựa trên xác suất được tính từ phân phối xác suất của các token.
         temperature=0.2,  # Giảm temperature để kiểm soát tính ngẫu nhiên

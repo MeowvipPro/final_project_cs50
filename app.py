@@ -19,6 +19,26 @@ app = Flask(__name__)
 app.secret_key = '123'
 
 app.config['UPLOAD_FOLDER'] = '/Users/huy.let3/Desktop/cs50/static/images'
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+rag_model = None
+rag_tokenizer = None
+rag_loaded = False
+
+def load_rag_model():
+    global rag_model, rag_tokenizer, rag_loaded
+    if not rag_loaded:
+        print("Loading RAG model...")
+        rag_tokenizer = AutoTokenizer.from_pretrained("himmeow/vi-gemma-2b-RAG")
+        rag_model = AutoModelForCausalLM.from_pretrained(
+            "himmeow/vi-gemma-2b-RAG",
+            device_map="auto",
+            torch_dtype=torch.bfloat16
+        )
+        if torch.cuda.is_available():
+            rag_model.to("cuda")
+        rag_loaded = True
+        print("✅ RAG model loaded.")
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -349,7 +369,8 @@ def reviewMenu():
         return render_template('menuForReview.html', cars=cars)
     return redirect(url_for("adminLogin"))
 
-@app.route("/generate", methods=["POST"])
+@app.route('/generate', methods=['POST'])
+
 def generate():
     data = request.get_json()
     query = data.get("query", "")
@@ -358,7 +379,7 @@ def generate():
         return jsonify({"answer": answer})
     except Exception as e:
         return jsonify({"answer": "Lỗi khi tạo câu trả lời: " + str(e)}), 500
-
+    
 @app.route('/allreviews/<int:car_no>')
 def allReviews(car_no):
     if "email" and "password" in session:

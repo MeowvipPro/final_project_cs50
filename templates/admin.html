@@ -14,36 +14,36 @@
 </span>
 
 <div class="orders">
-    {% for  i in range(foods|length) %}
+    {% for  i in range(cars|length) %}
 
     <div class="orderCard">
         <div class="orderImage">
-            <img src="/static/images/{{ foods[i][1] }}" alt="">
+            <img src="/static/images/{{ cars[i][1] }}" alt="">
 
         </div>
         <div class="orderTitle">
-            <h2>{{ foods[i][3] }}</h2>
+            <h2>{{ cars[i][3] }}</h2>
 
         </div>
 
         <div class="orderPrice">
 
-            <p>Rs. {{ foods[i][2] }}</p>
+            <p>Rs. {{ cars[i][2] }}</p>
         </div>
 
-        {% for j in range(foodnosAndRates|length) %}
-            {% if foods[i][0] == foodnosAndRates[j][0] %}
+        {% for j in range(carnosAndRates|length) %}
+            {% if cars[i][0] == carnosAndRates[j][0] %}
             <div class="orderRating">
-                <p style="margin-bottom: 3px;"> {{ "%.2f"|format(foodnosAndRates[j][1]) }} ({{ foodnosAndRates[j][2] }})</p>
+                <p style="margin-bottom: 3px;"> {{ "%.2f"|format(carnosAndRates[j][1]) }} ({{ carnosAndRates[j][2] }})</p>
             </div>
         {% endif %}
     {% endfor %}
     <div class="editDel">
         <span class="editBtn">
-            <a href="/edit/{{ foods[i][0] }}"><button>EDIT</button></a>
+            <a href="/edit/{{ cars[i][0] }}"><button>EDIT</button></a>
         </span>
         <span class="delBtn">
-            <a href="/delete/{{ foods[i][0] }}"><button>DELETE</button></a>
+            <a href="/delete/{{ cars[i][0] }}"><button>DELETE</button></a>
         </span>
     </div>
     </div>
