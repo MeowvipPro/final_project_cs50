@@ -1,16 +1,50 @@
 # final_project_cs50
 
-BIZ QUESTIONS
-Q1. "How can we help buyers search for and buy car products through a web application?"
-Q2. "How can we support sellers in managing orders, reviews, and content on the web app?"
-Q3. "How can we help users and sellers get quick answers and recommend them to actions?"
-CS50 SOLUTION
-"Web application platforms allow sellers to connect with buyers and support them in making more informed decisions when purchasing cars. 
-Integrated chatbot and LLM (Large Language Model) systems help sellers provide immediate assistance by answering buyer questions and recommending suitable products in real time."
+Car Product Web Application
+===========================
 
-Step 1: Create and Activate a Virtual Environment: To keep your project dependencies organized and separate from system-wide packages, start by creating a virtual environment:
-             py -m venv .venv
-Step 2: Install Required Dependencies: Once the virtual environment is active, install all the necessary Python packages required to run the application. These are listed in the requirements.txt file.
-            pip install -r /path/to/requirements.txt
-Step 3: Run the Application: After installing the dependencies, you're ready to start the application:
-            python app.py
+📌 Business Questions
+---------------------
+This project aims to address the following key business questions:
+
+Q1. How can we help buyers search for and buy car products through a web application?
+Q2. How can we support sellers in managing orders, reviews, and content on the web app?
+Q3. How can we help users and sellers get quick answers and recommend them to actions?
+
+💡 CS50-Inspired Solution
+--------------------------
+This web application connects buyers and sellers in the automotive market through a modern, responsive platform. Features include:
+
+- Buyer-side product discovery and purchase support
+- Seller-side order, content, and review management
+- Real-time Q&A and recommendation system powered by integrated chatbots and LLMs (Large Language Models)
+
+These tools help users make informed decisions and sellers deliver immediate, relevant support to potential buyers.
+
+🚀 Getting Started
+------------------
+Follow these steps to set up and run the application on your local machine.
+
+Step 1: Create and Activate a Virtual Environment
+Create a virtual environment to manage dependencies in isolation:
+
+    py -m venv .venv
+
+Activate the environment:
+
+    Windows:   .venv\\Scripts\\activate
+    macOS/Linux: source .venv/bin/activate
+
+Step 2: Install Required Dependencies
+Install all dependencies listed in the requirements.txt file:
+
+    pip install -r /path/to/requirements.txt
+
+Step 3: Run the Application
+Start the web application:
+
+    python app.py
+
+📬 Support
+----------
+If you encounter issues or have suggestions, feel free to open an issue or contact the development team.
